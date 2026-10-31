@@ -475,23 +475,23 @@ Every task below should fit in one sitting (about 1–2 hours) and end with some
 
 **Week 1: prove capture works, set up the engine**
 
-- [x] **1.1 Extension scaffold.** Create the WXT project in `apps/extension`. *Done when:* it loads in Chrome as an unpacked extension with no errors.
-- [ ] **1.2 Empty DevTools panel.** Register a panel that just shows the project name, rendered with React (`react`, `react-dom`, `@wxt-dev/module-react`; deferred from 1.1 to keep the scaffold bare). *Done when:* the tab appears in DevTools on any page.
-- [ ] **1.3 Log requests.** Listen to `onRequestFinished` and list method, URL, and status in the panel. *Done when:* browsing a site fills the list.
-- [ ] **1.4 Read response bodies.** For fetch/XHR calls, fetch the body with `getContent()` and show parsed JSON when clicked. *Done when:* a JSON response is readable in the panel. **This de-risks the whole project.**
-- [ ] **1.5 Engine package setup.** TypeScript strict mode and Vitest in `packages/engine`, with one placeholder test. *Done when:* `pnpm --filter engine test` passes.
-- [ ] **1.6 Lint, typecheck, CI.** ESLint, `tsc --noEmit`, and a GitHub Actions workflow running them plus tests. *Done when:* a pull request shows a green check.
+- [x] **1.1 Extension scaffold.** ([#1](https://github.com/neelg1/API-Traffic-Docs/issues/1)) Create the WXT project in `apps/extension`. *Done when:* it loads in Chrome as an unpacked extension with no errors.
+- [ ] **1.2 Empty DevTools panel.** ([#2](https://github.com/neelg1/API-Traffic-Docs/issues/2)) Register a panel that just shows the project name, rendered with React (`react`, `react-dom`, `@wxt-dev/module-react`; deferred from 1.1 to keep the scaffold bare). *Done when:* the tab appears in DevTools on any page.
+- [ ] **1.3 Log requests.** ([#3](https://github.com/neelg1/API-Traffic-Docs/issues/3)) Listen to `onRequestFinished` and list method, URL, and status in the panel. *Done when:* browsing a site fills the list.
+- [ ] **1.4 Read response bodies.** ([#4](https://github.com/neelg1/API-Traffic-Docs/issues/4)) For fetch/XHR calls, fetch the body with `getContent()` and show parsed JSON when clicked. *Done when:* a JSON response is readable in the panel. **This de-risks the whole project.**
+- [ ] **1.5 Engine package setup.** ([#5](https://github.com/neelg1/API-Traffic-Docs/issues/5)) TypeScript strict mode and Vitest in `packages/engine`, with one placeholder test. *Done when:* `pnpm --filter engine test` passes.
+- [ ] **1.6 Lint, typecheck, CI.** ([#6](https://github.com/neelg1/API-Traffic-Docs/issues/6)) ESLint, `tsc --noEmit`, and a GitHub Actions workflow running them plus tests. *Done when:* a pull request shows a green check.
 
 **Week 2: first eval app, engine v0, first number**
 
-- [ ] **1.7 Run eval app 1.** Full Stack FastAPI Template via Docker Compose from `eval/targets/`. Save its `openapi.json` to `eval/ground-truth/`. *Done when:* the app runs locally and the spec file is committed.
-- [ ] **1.8 Record app 1.** Playwright script that logs in, lists, creates, edits, deletes, and triggers a 404, saving a HAR file. *Done when:* the HAR file is in `eval/recordings/` and the script reruns cleanly.
-- [ ] **1.9 Parse HAR.** Engine types for an `Exchange` plus a parse function, with tests against the recorded HAR. *Done when:* tests pass and every entry parses.
-- [ ] **1.10 Filter noise.** Drop static assets, `OPTIONS`, failed and non-JSON requests, and denylisted analytics hosts, with a test per rule. *Done when:* filtered output contains only API calls.
-- [ ] **1.11 Group by exact path.** Group exchanges by method and exact path (no pattern detection yet). *Done when:* a test shows the expected groups.
-- [ ] **1.12 Score v0.** `eval/score.ts` loads the ground truth, matches endpoints, and prints precision and recall. *Done when:* `pnpm eval` prints a table for app 1.
-- [ ] **1.13 Run and record eval app 2.** Mealie: run it, save its spec, write its Playwright recording. (Split into two tasks if it runs long.) *Done when:* `pnpm eval` covers both apps.
-- [ ] **1.14 Baseline.** Write the first numbers in `docs/results.md`, plus a short note on what failed. *Done when:* committed.
+- [ ] **1.7 Run eval app 1.** ([#7](https://github.com/neelg1/API-Traffic-Docs/issues/7)) Full Stack FastAPI Template via Docker Compose from `eval/targets/`. Save its `openapi.json` to `eval/ground-truth/`. *Done when:* the app runs locally and the spec file is committed.
+- [ ] **1.8 Record app 1.** ([#8](https://github.com/neelg1/API-Traffic-Docs/issues/8)) Playwright script that logs in, lists, creates, edits, deletes, and triggers a 404, saving a HAR file. *Done when:* the HAR file is in `eval/recordings/` and the script reruns cleanly.
+- [ ] **1.9 Parse HAR.** ([#9](https://github.com/neelg1/API-Traffic-Docs/issues/9)) Engine types for an `Exchange` plus a parse function, with tests against the recorded HAR. *Done when:* tests pass and every entry parses.
+- [ ] **1.10 Filter noise.** ([#10](https://github.com/neelg1/API-Traffic-Docs/issues/10)) Drop static assets, `OPTIONS`, failed and non-JSON requests, and denylisted analytics hosts, with a test per rule. *Done when:* filtered output contains only API calls.
+- [ ] **1.11 Group by exact path.** ([#11](https://github.com/neelg1/API-Traffic-Docs/issues/11)) Group exchanges by method and exact path (no pattern detection yet). *Done when:* a test shows the expected groups.
+- [ ] **1.12 Score v0.** ([#12](https://github.com/neelg1/API-Traffic-Docs/issues/12)) `eval/score.ts` loads the ground truth, matches endpoints, and prints precision and recall. *Done when:* `pnpm eval` prints a table for app 1.
+- [ ] **1.13 Run and record eval app 2.** ([#13](https://github.com/neelg1/API-Traffic-Docs/issues/13)) Mealie: run it, save its spec, write its Playwright recording. (Split into two tasks if it runs long.) *Done when:* `pnpm eval` covers both apps.
+- [ ] **1.14 Baseline.** ([#14](https://github.com/neelg1/API-Traffic-Docs/issues/14)) Write the first numbers in `docs/results.md`, plus a short note on what failed. *Done when:* committed.
 - [ ] **Gate:** baseline numbers recorded in `docs/results.md`
 
 Expect low numbers here: without pattern detection, `/users/481` and `/users/92` count as two endpoints. That's the point of a baseline.
