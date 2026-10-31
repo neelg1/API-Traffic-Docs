@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.output/
+.wxt/
+coverage/
+*.log
+.env
+.env.*
+.DS_Store
+
+# Private notes (never commit)
+*.private.md

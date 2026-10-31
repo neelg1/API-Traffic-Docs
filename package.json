@@ -1,0 +1,6 @@
+{
+  "name": "api-traffic-docs",
+  "private": true,
+  "description": "Generate OpenAPI docs from live browser API traffic",
+  "license": "MIT"
+}
