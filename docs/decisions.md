@@ -2,6 +2,14 @@
 
 One entry per real choice: what was decided, why, and what was rejected. Newest first.
 
+## 2026-10-31: Build the DevTools panel with React via the WXT module, without Tailwind yet
+
+**Decision:** The DevTools page (`entrypoints/devtools`) only registers a panel; the panel itself is a separate unlisted page (`entrypoints/devtools-panel`). React is wired in with `@wxt-dev/module-react`. Tailwind waits until the panel has real UI (task 1.3 or later). Task 1.2 lands in two steps: a plain-HTML panel first, then React.
+
+**Why:** Chrome never shows the DevTools page, so the visible UI has to live in its own page. The WXT module configures Vite's React plugin and auto-imports in one line and tracks WXT upgrades. Registering the panel before adding React means a missing tab can only be a registration problem, not a build problem. An empty panel has nothing to style, so Tailwind would be setup with nothing to check it against.
+
+**Rejected:** Adding `@vitejs/plugin-react` to the Vite config by hand, which does the same job with more config to maintain. Rendering UI in the DevTools page itself, which Chrome doesn't display.
+
 ## 2026-10-31: Name the project APITrafficDocs
 
 **Decision:** The display name is `APITrafficDocs` (store title, DevTools tab, README). Package, CLI, and repo identifiers use `api-traffic-docs`. The Chrome Web Store title is "APITrafficDocs – OpenAPI docs from your browser's API traffic".
