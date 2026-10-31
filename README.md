@@ -1,4 +1,4 @@
-# API Traffic to Docs (working title)
+# APITrafficDocs
 
 Turn the API calls a web app makes in your browser into OpenAPI documentation.
 

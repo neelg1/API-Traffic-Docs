@@ -1,4 +1,4 @@
-# API Traffic to Docs: Roadmap
+# APITrafficDocs: Roadmap
 
 _Last updated: Oct 31, 2026. Update it when the plan changes._
 
@@ -466,17 +466,17 @@ Every task below should fit in one sitting (about 1–2 hours) and end with some
 
 ### Phase 0: Setup (Oct 24–25)
 
-- [ ] **0.1 Name it.** Pick a project name; check the Chrome Web Store and GitHub for conflicts. *Done when:* name chosen. (30 min)
-- [ ] **0.2 Create the repo.** Public GitHub repo with README stub (one-line pitch, v1 scope), MIT license, Node `.gitignore`. *Done when:* repo exists and clones. (30 min)
-- [ ] **0.3 Workspace skeleton.** Root `package.json`, `pnpm-workspace.yaml`, empty `packages/engine`, `apps/extension`, `apps/cli`, `eval/`, `docs/`. *Done when:* `pnpm install` succeeds. (45 min)
-- [ ] **0.4 Add the docs.** `CLAUDE.md` at the root, `docs/ROADMAP.md`, empty `docs/decisions.md` and `docs/results.md`. *Done when:* committed. (15 min)
+- [x] **0.1 Name it.** Pick a project name; check the Chrome Web Store and GitHub for conflicts. *Done when:* name chosen. (30 min) Chosen: `APITrafficDocs` (see `docs/decisions.md`).
+- [x] **0.2 Create the repo.** Public GitHub repo with README stub (one-line pitch, v1 scope), MIT license, Node `.gitignore`. *Done when:* repo exists and clones. (30 min)
+- [x] **0.3 Workspace skeleton.** Root `package.json`, `pnpm-workspace.yaml`, empty `packages/engine`, `apps/extension`, `apps/cli`, `eval/`, `docs/`. *Done when:* `pnpm install` succeeds. (45 min)
+- [x] **0.4 Add the docs.** `CLAUDE.md` at the root, `docs/ROADMAP.md`, empty `docs/decisions.md` and `docs/results.md`. *Done when:* committed. (15 min)
 
 ### Phase 1: Foundations (weeks 1–2, Oct 26 – Nov 8)
 
 **Week 1: prove capture works, set up the engine**
 
-- [ ] **1.1 Extension scaffold.** Create the WXT project in `apps/extension`. *Done when:* it loads in Chrome as an unpacked extension with no errors.
-- [ ] **1.2 Empty DevTools panel.** Register a panel that just shows the project name. *Done when:* the tab appears in DevTools on any page.
+- [x] **1.1 Extension scaffold.** Create the WXT project in `apps/extension`. *Done when:* it loads in Chrome as an unpacked extension with no errors.
+- [ ] **1.2 Empty DevTools panel.** Register a panel that just shows the project name, rendered with React (`react`, `react-dom`, `@wxt-dev/module-react`; deferred from 1.1 to keep the scaffold bare). *Done when:* the tab appears in DevTools on any page.
 - [ ] **1.3 Log requests.** Listen to `onRequestFinished` and list method, URL, and status in the panel. *Done when:* browsing a site fills the list.
 - [ ] **1.4 Read response bodies.** For fetch/XHR calls, fetch the body with `getContent()` and show parsed JSON when clicked. *Done when:* a JSON response is readable in the panel. **This de-risks the whole project.**
 - [ ] **1.5 Engine package setup.** TypeScript strict mode and Vitest in `packages/engine`, with one placeholder test. *Done when:* `pnpm --filter engine test` passes.

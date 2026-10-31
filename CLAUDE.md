@@ -1,4 +1,4 @@
-# API Traffic to Docs (working title)
+# APITrafficDocs
 
 A Chrome extension plus a standalone TypeScript engine that turns live browser API traffic into OpenAPI 3.1 documentation. The full roadmap is in `docs/ROADMAP.md`; read only the section relevant to the current task.
 
@@ -29,6 +29,7 @@ Update these when the scripts change.
 - `pnpm --filter engine test` - engine tests only
 - `pnpm eval` - run the evaluation and write the report
 - `pnpm --filter extension dev` - run the extension with hot reload
+- `pnpm --filter extension build` - build the extension into `apps/extension/.output/chrome-mv3` (load this folder unpacked in Chrome)
 - `pnpm lint` and `pnpm typecheck` - must pass before committing
 
 ## Architecture rules (do not break these)
