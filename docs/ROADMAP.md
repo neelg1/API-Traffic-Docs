@@ -477,7 +477,7 @@ Every task below should fit in one sitting (about 1–2 hours) and end with some
 
 - [x] **1.1 Extension scaffold.** ([#1](https://github.com/neelg1/API-Traffic-Docs/issues/1)) Create the WXT project in `apps/extension`. *Done when:* it loads in Chrome as an unpacked extension with no errors.
 - [x] **1.2 Empty DevTools panel.** ([#2](https://github.com/neelg1/API-Traffic-Docs/issues/2)) Register a panel that just shows the project name, rendered with React (`react`, `react-dom`, `@wxt-dev/module-react`; deferred from 1.1 to keep the scaffold bare). Tailwind is deferred until the panel has real UI. Two steps: plain-HTML panel, then React (see `docs/decisions.md`). *Done when:* the tab appears in DevTools on any page.
-- [ ] **1.3 Log requests.** ([#3](https://github.com/neelg1/API-Traffic-Docs/issues/3)) Listen to `onRequestFinished` and list method, URL, and status in the panel. *Done when:* browsing a site fills the list.
+- [x] **1.3 Log requests.** ([#3](https://github.com/neelg1/API-Traffic-Docs/issues/3)) Listen to `onRequestFinished` and list method, URL, and status in the panel. The listener runs in the panel and rows persist across page loads; `getHAR()` backfill and a Clear control come with X1 (see `docs/decisions.md`). *Done when:* browsing a site fills the list.
 - [ ] **1.4 Read response bodies.** ([#4](https://github.com/neelg1/API-Traffic-Docs/issues/4)) For fetch/XHR calls, fetch the body with `getContent()` and show parsed JSON when clicked. *Done when:* a JSON response is readable in the panel. **This de-risks the whole project.**
 - [ ] **1.5 Engine package setup.** ([#5](https://github.com/neelg1/API-Traffic-Docs/issues/5)) TypeScript strict mode and Vitest in `packages/engine`, with one placeholder test. *Done when:* `pnpm --filter engine test` passes.
 - [ ] **1.6 Lint, typecheck, CI.** ([#6](https://github.com/neelg1/API-Traffic-Docs/issues/6)) ESLint, `tsc --noEmit`, and a GitHub Actions workflow running them plus tests. *Done when:* a pull request shows a green check.
@@ -509,6 +509,7 @@ Expect low numbers here: without pattern detection, `/users/481` and `/users/92`
 ### Phase 3: MVP (weeks 5–6, Nov 23 – Dec 6)
 
 - [ ] Panel: hosts, endpoints, endpoint detail, docs viewer, export
+- [ ] Capture and panel polish (follow-ups from 1.2 and 1.3): `getHAR()` backfill de-duplicated against live events, Start/Pause/Clear controls (X1), Tailwind setup, DevTools dark theme via `devtools.panels.themeName`, panel icon
 - [ ] IndexedDB storage with continuous writes and "clear all data"
 - [ ] E6 AI enrichment v1 with structured output, validation, caching, and cost display
 - [ ] First-run privacy screen and privacy policy draft

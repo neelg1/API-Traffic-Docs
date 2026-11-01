@@ -28,7 +28,7 @@ Update these when the scripts change.
 - `pnpm test` - run all tests
 - `pnpm --filter engine test` - engine tests only
 - `pnpm eval` - run the evaluation and write the report
-- `pnpm --filter extension dev` - run the extension with hot reload
+- `pnpm --filter extension dev` - dev build with hot reload into `apps/extension/.output/chrome-mv3-dev`. It does not open Chrome (`web-ext` isn't installed), so load that folder unpacked yourself. React StrictMode checks only run in this build.
 - `pnpm --filter extension build` - build the extension into `apps/extension/.output/chrome-mv3` (load this folder unpacked in Chrome)
 - `pnpm lint` and `pnpm typecheck` - must pass before committing
 
