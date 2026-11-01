@@ -56,3 +56,64 @@ th {
 tr.error td {
   color: #c5221f;
 }
+
+tr.clickable {
+  cursor: pointer;
+}
+
+tr.clickable:hover td {
+  background: #f8f9fa;
+}
+
+tr.selected td,
+tr.selected:hover td {
+  background: #e8f0fe;
+}
+
+/* Table and body side by side once a row is selected; stacked when narrow. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+
+@media (max-width: 700px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Stacked: a short, non-sticky body, so it can't cover the table. */
+  .split .body {
+    order: -1;
+    position: static;
+    max-height: 40vh;
+  }
+}
+
+/* Sticky, so the body stays in view while scrolling a long table. */
+.body {
+  position: sticky;
+  top: 0;
+  max-height: calc(100vh - 16px);
+  overflow: auto;
+  padding: 6px 8px;
+  border: 1px solid #e8eaed;
+  background: #fff;
+}
+
+.body-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.body .hint {
+  margin: 0 0 4px;
+}
+
+.body pre {
+  margin: 0;
+  font: 11px ui-monospace, monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+}

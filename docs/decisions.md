@@ -2,6 +2,18 @@
 
 One entry per real choice: what was decided, why, and what was rejected. Newest first.
 
+## 2026-11-01: Read response bodies on click, for fetch and XHR rows only
+
+**Decision:** The panel calls `getContent()` only when a `fetch` or `xhr` row is clicked, and shows the body on screen: JSON pretty-printed, other text as-is, binary not shown, and anything past 100,000 characters cut off. Only those rows' request objects are kept, in memory and capped like the rows. Bodies are never logged or stored.
+
+**Why:** It is the smallest change that proves the extension can read API responses, which is the project's biggest risk. No raw bodies sit in memory before redaction exists (E2). Scripts, images, and fonts aren't API traffic, so their bodies aren't worth reading.
+
+**Finding:** Chrome discards response bodies when the inspected page reloads. Clicking an older row then gets a `getContent()` callback with no arguments, and DevTools logs "Extension server error: Object not found". The panel shows "Body no longer available" and stops asking for that row. **Consequence for X1:** capture must read each body inside `onRequestFinished`, redact it, and only then keep it; reading on demand later will miss bodies.
+
+**Testing note:** `onRequestFinished` only fires once the whole response body has arrived. A `fetch()` typed in the Console whose body is never read may never finish (seen with dummyjson.com), so it never reaches the panel. Read the body when testing by hand: `fetch(url).then(r => r.text())`. Real apps read their responses, so this doesn't affect capture.
+
+**Rejected:** Reading every fetch/XHR body at capture time now, which survives reloads but holds unredacted bodies in memory before redaction exists; that is X1's job, together with E2. Making every row clickable, which mostly shows large HTML, JS, or binary bodies.
+
 ## 2026-11-01: Keep captured requests across page loads
 
 **Decision:** The panel's request list keeps growing when the inspected page navigates or reloads. It holds the newest 1,000 rows and says when older ones were dropped. A Clear control comes with the capture controls in roadmap X1.
