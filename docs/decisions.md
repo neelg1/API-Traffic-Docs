@@ -2,6 +2,22 @@
 
 One entry per real choice: what was decided, why, and what was rejected. Newest first.
 
+## 2026-11-01: Keep captured requests across page loads
+
+**Decision:** The panel's request list keeps growing when the inspected page navigates or reloads. It holds the newest 1,000 rows and says when older ones were dropped. A Clear control comes with the capture controls in roadmap X1.
+
+**Why:** Mapping an API needs traffic from many pages: a login redirect or a reload shouldn't wipe what was already captured. The cap keeps a long session from slowing the panel, and the summary line makes the cap visible instead of silently losing rows.
+
+**Rejected:** Clearing on navigation (via `onNavigated`), like Chrome's Network panel does by default. That suits debugging one page, not building up a picture of a whole API.
+
+## 2026-11-01: Listen for requests in the panel page, without backfill for now
+
+**Decision:** The `onRequestFinished` listener runs in the panel page (`entrypoints/devtools-panel`), inside a React effect that removes it on cleanup. Requests made before the panel tab is first opened are not captured yet. Backfilling them with `getHAR()` is a follow-up.
+
+**Why:** Rows go straight into React state with no messaging layer between pages. Chrome only loads the panel when its tab is first clicked, so the gap is real, but the empty-state hint tells users to reload, and `getHAR()` can close it later without moving the listener.
+
+**Rejected:** Listening in the hidden DevTools page, which catches requests from the moment DevTools opens but needs a channel to hand rows to the panel. Adding `getHAR()` backfill now, which needs de-duplication against live events and would have made task 1.3 a three-step change.
+
 ## 2026-10-31: Build the DevTools panel with React via the WXT module, without Tailwind yet
 
 **Decision:** The DevTools page (`entrypoints/devtools`) only registers a panel; the panel itself is a separate unlisted page (`entrypoints/devtools-panel`). React is wired in with `@wxt-dev/module-react`. Tailwind waits until the panel has real UI (task 1.3 or later). Task 1.2 lands in two steps: a plain-HTML panel first, then React.

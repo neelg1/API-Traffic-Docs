@@ -1,0 +1,58 @@
+/* Plain styles until the panel UI gets Tailwind (see docs/decisions.md). */
+body {
+  margin: 0;
+  font: 12px system-ui, sans-serif;
+}
+
+main {
+  padding: 8px 12px;
+}
+
+h1 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.hint {
+  margin: 0 0 8px;
+  color: #5f6368;
+}
+
+/* Fixed layout lets long URLs truncate instead of widening the table. */
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 2px 8px;
+  border-bottom: 1px solid #e8eaed;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: #f1f3f4;
+}
+
+.col-method {
+  width: 64px;
+}
+
+.col-status {
+  width: 56px;
+}
+
+.col-type {
+  width: 88px;
+}
+
+tr.error td {
+  color: #c5221f;
+}
