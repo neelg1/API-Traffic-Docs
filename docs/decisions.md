@@ -2,6 +2,14 @@
 
 One entry per real choice: what was decided, why, and what was rejected. Newest first.
 
+## 2026-11-08: Lint with ESLint on TypeScript 6 while the packages use TypeScript 7
+
+**Decision:** ESLint with typescript-eslint, configured once at the repo root (`eslint.config.mjs`). The root has `typescript@6.0.3` only so typescript-eslint can parse code; the packages keep `typescript@7.0.2` for typechecking. Linting doesn't use type information. Lint rules back up two CLAUDE.md rules: `no-console` in the extension (rule 5), and a ban on clock and random reads in `packages/engine/src` (`Math.random`, `Date.now`, `new Date()` with no arguments, `Date()`) (rule 1). CI runs lint, typecheck, test, and the extension build on every pull request and push to `main`.
+
+**Why:** typescript-eslint 8.72.1, including its pre-releases, supports TypeScript only below 6.1. A lint-only TypeScript 6 keeps the roadmap's ESLint plan without downgrading the code, and pnpm resolves each tool to the right copy (checked: typescript-eslint gets 6.0.3, both packages' `tsc` report 7.0.2). Untyped linting is faster and avoids running TypeScript 6's checker on TypeScript 7 code. The purity rules close the gaps the engine's tsconfig can't (standard JavaScript has `Math` and `Date`), while deterministic `Date.parse` and `new Date(value)` stay available for format detection. CI builds the extension because CLAUDE.md requires the build to pass after every step.
+
+**Rejected:** Oxlint, which needs no TypeScript but departs from the roadmap and might not support every rule needed here. Downgrading every package to TypeScript 6, which undoes the 1.1 choice. Banning `Date` entirely, which would block deterministic date parsing. **Revisit** when typescript-eslint supports TypeScript 7: remove the root `typescript@6.0.3`.
+
 ## 2026-11-08: Enforce engine purity with the compiler; no engine build step yet
 
 **Decision:** `packages/engine/tsconfig.json` includes only the standard JavaScript library (`lib: ["ES2024"]`, `types: []`): no DOM types and no Node types, so `fetch`, `document`, `chrome`, `fs`, and timers in `src/` fail typecheck. Tests have their own `test/tsconfig.json` with the same strict settings, so test-only types (Node, for reading HAR fixtures) never reach `src/`. The package exports `src/index.ts` directly, with no build step.
