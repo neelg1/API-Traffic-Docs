@@ -1,0 +1,6 @@
+{
+  // Tests get the same strict settings as src/. Kept separate so test-only
+  // types (e.g. Node, to read HAR fixtures in task 1.9) never reach src/.
+  "extends": "../tsconfig.json",
+  "include": [".", "../src"]
+}

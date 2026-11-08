@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    // Rule 1: the engine is pure. Standard JavaScript only: no DOM lib and no
+    // Node types, so fetch, document, chrome, fs, and timers fail to typecheck.
+    "lib": ["ES2024"],
+    "types": [],
+    "target": "ES2024",
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
+    "moduleDetection": "force",
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "engine",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Pure TypeScript pipeline that turns captured API traffic into OpenAPI 3.1",
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p test"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  }
+}
