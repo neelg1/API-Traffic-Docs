@@ -31,6 +31,7 @@ Update these when the scripts change.
 - `pnpm --filter extension dev` - dev build with hot reload into `apps/extension/.output/chrome-mv3-dev`. It does not open Chrome (`web-ext` isn't installed), so load that folder unpacked yourself. React StrictMode checks only run in this build.
 - `pnpm --filter extension build` - build the extension into `apps/extension/.output/chrome-mv3` (load this folder unpacked in Chrome)
 - `pnpm lint` and `pnpm typecheck` - must pass before committing
+- CI (`.github/workflows/ci.yml`) runs lint, typecheck, test, and the extension build on every pull request and push to `main`
 
 ## Architecture rules (do not break these)
 
