@@ -2,6 +2,14 @@
 
 One entry per real choice: what was decided, why, and what was rejected. Newest first.
 
+## 2026-11-08: Enforce engine purity with the compiler; no engine build step yet
+
+**Decision:** `packages/engine/tsconfig.json` includes only the standard JavaScript library (`lib: ["ES2024"]`, `types: []`): no DOM types and no Node types, so `fetch`, `document`, `chrome`, `fs`, and timers in `src/` fail typecheck. Tests have their own `test/tsconfig.json` with the same strict settings, so test-only types (Node, for reading HAR fixtures) never reach `src/`. The package exports `src/index.ts` directly, with no build step.
+
+**Why:** Rule 1 (the engine is pure) is checked by a tool on every typecheck instead of relying on review. A probe confirmed `fetch`, `setTimeout`, and `document` are rejected. `Math.random()` and `Date` are standard JavaScript and can't be blocked this way; lint rules (task 1.6) are the place for those. Without a separate test config, type errors in tests would go unnoticed, since the main config only covers `src/`. Every current consumer (the extension via Vite, Vitest) reads TypeScript directly, so a build step would add work and no value yet.
+
+**Rejected:** Including DOM or Node types and relying on code review, which is how purity rules erode. One tsconfig covering both `src/` and `test/`, which would let test-only Node types leak into `src/`. A compile step to `dist/` now; revisit when the CLI needs to run on plain Node.
+
 ## 2026-11-01: Read response bodies on click, for fetch and XHR rows only
 
 **Decision:** The panel calls `getContent()` only when a `fetch` or `xhr` row is clicked, and shows the body on screen: JSON pretty-printed, other text as-is, binary not shown, and anything past 100,000 characters cut off. Only those rows' request objects are kept, in memory and capped like the rows. Bodies are never logged or stored.
