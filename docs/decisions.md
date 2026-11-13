@@ -2,6 +2,22 @@
 
 One entry per real choice: what was decided, why, and what was rejected. Newest first.
 
+## 2026-11-13: Run eval apps from a pinned clone, never vendored
+
+**Decision:** Each eval app gets a folder under `eval/targets/<app>/` with a `run.sh`, a Compose override, synthetic settings, and a README. `run.sh up` clones the app at a pinned release and commit into a gitignored `src/` and fails if the tag points anywhere else. Only our wrapper files and the app's served spec (in `eval/ground-truth/`, with its version recorded in that folder's README) are committed. `down` also deletes the app's data, so every recording starts from the same empty state. CI never runs the apps: scoring uses committed recordings and specs. The first app is the Full Stack FastAPI Template 0.12.0 (`84c5a9e`), running only `db` and `backend` with migrations and the first superuser created on every start, since neither of the template's Compose files does that.
+
+**Why:** Scores are only comparable against a fixed app version, and checking the commit catches a moved tag. Cloning on demand keeps thousands of third-party files out of the repo and its history. Synthetic settings in a committed `eval.env` are fine because they only exist inside local containers, and recordings of eval apps are allowed fixtures (CLAUDE.md). Wiping data on `down` makes re-recordings reproducible. Keeping Docker out of CI keeps CI fast and simple.
+
+**Rejected:** A git submodule, which pins equally well but adds clone and update friction. Copying the app's source into the repo, which bloats history and mixes licenses. Using the template's `compose.override.yml`, which adds dev-only services (mailcatcher, a large Playwright image) and more ports.
+
+## 2026-11-08: Require CI to pass before merging into main
+
+**Decision:** GitHub branch protection on `main` requires the `check` job (`.github/workflows/ci.yml`) to pass, requires the branch to be up to date with `main`, applies to admins too, and blocks force pushes and deletion. No reviews are required. This lives in the repository settings, not in the code.
+
+**Why:** CI that only reports can still be ignored; a required check can't. With no bypass for admins, every change, including docs-only edits, goes through a pull request. Reviews aren't required because the project has one developer.
+
+**Rejected:** Reporting-only CI. Allowing admins to bypass the check. To switch it off temporarily (for example during a GitHub Actions outage), use Settings → Branches.
+
 ## 2026-11-08: Lint with ESLint on TypeScript 6 while the packages use TypeScript 7
 
 **Decision:** ESLint with typescript-eslint, configured once at the repo root (`eslint.config.mjs`). The root has `typescript@6.0.3` only so typescript-eslint can parse code; the packages keep `typescript@7.0.2` for typechecking. Linting doesn't use type information. Lint rules back up two CLAUDE.md rules: `no-console` in the extension (rule 5), and a ban on clock and random reads in `packages/engine/src` (`Math.random`, `Date.now`, `new Date()` with no arguments, `Date()`) (rule 1). CI runs lint, typecheck, test, and the extension build on every pull request and push to `main`.

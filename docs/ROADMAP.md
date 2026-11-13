@@ -485,7 +485,7 @@ Every task below should fit in one sitting (about 1–2 hours) and end with some
 
 **Week 2: first eval app, engine v0, first number**
 
-- [ ] **1.7 Run eval app 1.** ([#7](https://github.com/neelg1/API-Traffic-Docs/issues/7)) Full Stack FastAPI Template via Docker Compose from `eval/targets/`. Save its `openapi.json` to `eval/ground-truth/`. *Done when:* the app runs locally and the spec file is committed.
+- [x] **1.7 Run eval app 1.** ([#7](https://github.com/neelg1/API-Traffic-Docs/issues/7)) Full Stack FastAPI Template via Docker Compose from `eval/targets/`. Save its `openapi.json` to `eval/ground-truth/`. Pinned to 0.12.0; run with `pnpm eval:fastapi up` (see `docs/decisions.md`). *Done when:* the app runs locally and the spec file is committed.
 - [ ] **1.8 Record app 1.** ([#8](https://github.com/neelg1/API-Traffic-Docs/issues/8)) Playwright script that logs in, lists, creates, edits, deletes, and triggers a 404, saving a HAR file. *Done when:* the HAR file is in `eval/recordings/` and the script reruns cleanly.
 - [ ] **1.9 Parse HAR.** ([#9](https://github.com/neelg1/API-Traffic-Docs/issues/9)) Engine types for an `Exchange` plus a parse function, with tests against the recorded HAR. *Done when:* tests pass and every entry parses.
 - [ ] **1.10 Filter noise.** ([#10](https://github.com/neelg1/API-Traffic-Docs/issues/10)) Drop static assets, `OPTIONS`, failed and non-JSON requests, and denylisted analytics hosts, with a test per rule. *Done when:* filtered output contains only API calls.
