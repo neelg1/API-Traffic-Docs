@@ -5,6 +5,7 @@
   "license": "MIT",
   "packageManager": "pnpm@12.16.1",
   "scripts": {
+    "eval:fastapi": "bash eval/targets/fastapi-template/run.sh",
     "lint": "eslint .",
     "test": "pnpm -r test",
     "typecheck": "pnpm -r typecheck"

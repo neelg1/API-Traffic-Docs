@@ -7,7 +7,15 @@ import tseslint from 'typescript-eslint';
 // One config for the whole repo. typescript-eslint reads code with the root
 // typescript@6 (it doesn't support TS 7 yet); packages typecheck with TS 7.
 export default defineConfig(
-  globalIgnores(['**/node_modules/', '**/.output/', '**/.wxt/', '**/dist/', '**/coverage/']),
+  globalIgnores([
+    '**/node_modules/',
+    '**/.output/',
+    '**/.wxt/',
+    '**/dist/',
+    '**/coverage/',
+    // Third-party eval apps, cloned on demand by their run.sh.
+    'eval/targets/*/src/',
+  ]),
   js.configs.recommended,
   tseslint.configs.recommended,
   {

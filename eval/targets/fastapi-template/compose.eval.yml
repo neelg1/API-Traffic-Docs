@@ -1,0 +1,13 @@
+# Overrides applied on top of the template's compose.yml for eval runs.
+services:
+  backend:
+    # Only the backend is published; it serves both the frontend and the API.
+    ports:
+      - "8000:8000"
+    # Neither of the template's compose files runs prestart.sh (migrations and
+    # the first superuser), so run it on every start; it is safe to repeat.
+    # One worker keeps recordings simple and the container light.
+    command:
+      - bash
+      - -c
+      - bash scripts/prestart.sh && exec fastapi run --workers 1
