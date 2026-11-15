@@ -10,4 +10,4 @@ A spec's own `info.version` (for example `0.1.0` in the FastAPI template) is the
 
 ## Notes per app
 
-**fastapi-template:** 22 operations across `login`, `users`, `items`, and `utils`. Email is disabled in the eval setup (empty `SMTP_HOST`), so the password-recovery, reset-password, and test-email operations can't be fully exercised by a recording. Expect them to show up in coverage, not as engine errors.
+**fastapi-template:** 22 operations across `login`, `users`, `items`, and `utils`. Email goes to a local Mailcatcher, so the password-recovery, reset-password, and test-email operations can be recorded. `POST /password-recovery-html-content/{email}` can't: it crashes the server in this template version (see [`known-spec-issues.md`](../known-spec-issues.md)), so the recording covers 21 of 22.

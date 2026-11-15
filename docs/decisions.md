@@ -2,6 +2,20 @@
 
 One entry per real choice: what was decided, why, and what was rejected. Newest first.
 
+## 2026-11-15: Record eval apps with a scripted Playwright walkthrough
+
+**Decision:** `eval` is a workspace package. `eval/scripts/record-fastapi.ts` (run with Node 26 directly, using the `playwright` library rather than its test runner) drives eval app 1 in Chromium with HAR recording on. It covers the UI flows a user would take, then calls the API from inside the logged-in page for operations the UI never calls, paging, and deliberate errors, checking every status it expects. The HAR keeps every request the browser made, but body text is removed from scripts, stylesheets, and images (each marked with a `content.comment`), and the file is pretty-printed. Email is enabled through a local Mailcatcher so the recovery flow can be recorded; the script reads Mailcatcher from Node, outside the recording. Names and emails get a per-run suffix, and waits use API responses instead of toasts, so the script reruns on a used or fresh database. Commit recordings made from a fresh `up`.
+
+**Why:** The engine needs a realistic, repeatable input whose answer key is known. Keeping all entries gives the noise filter (task 1.10) real static assets, failed requests, and pre-login checks to drop; removing asset bodies cut the file from 8.2 MB to about 0.8 MB, and nothing reads them. In-page calls record like any browser request and reach operations, errors (400, 401, 404, 422), and query parameters the UI alone wouldn't, giving 21 of the spec's 22 operations. Checking statuses makes a changed app fail the script loudly instead of silently producing a different recording.
+
+**Findings:**
+- Playwright's HAR matches Chrome's closely, including `_resourceType` (`document`, `script`, `xhr`, ...), so recordings and extension captures can be handled the same way.
+- Chromium marks some successful requests as aborted (`status: -1`, `net::ERR_ABORTED`): the UI's DELETEs every time, and sometimes the app's pre-login `users/me`. The engine must not assume every entry has a response.
+- The login request is form-encoded (`postData.params`); everything else is JSON. The HAR parser (task 1.9) must handle both.
+- The template's `POST /password-recovery-html-content/{email}` crashes the server after a `200` (an invalid `subject:` header name), so it can't be recorded and is excluded from scoring (`eval/known-spec-issues.md`).
+
+**Rejected:** Recording only `/api/` traffic, which would leave the noise filter untested on real assets. Keeping full asset bodies (8.2 MB per recording, added to git history on every re-record). Driving the API with Node's `fetch` or Playwright's request client, which bypass the browser and aren't recorded. Patching the template to fix its bug, which would stop it being the real app. Leaving email off, which left three more operations unrecorded.
+
 ## 2026-11-13: Run eval apps from a pinned clone, never vendored
 
 **Decision:** Each eval app gets a folder under `eval/targets/<app>/` with a `run.sh`, a Compose override, synthetic settings, and a README. `run.sh up` clones the app at a pinned release and commit into a gitignored `src/` and fails if the tag points anywhere else. Only our wrapper files and the app's served spec (in `eval/ground-truth/`, with its version recorded in that folder's README) are committed. `down` also deletes the app's data, so every recording starts from the same empty state. CI never runs the apps: scoring uses committed recordings and specs. The first app is the Full Stack FastAPI Template 0.12.0 (`84c5a9e`), running only `db` and `backend` with migrations and the first superuser created on every start, since neither of the template's Compose files does that.

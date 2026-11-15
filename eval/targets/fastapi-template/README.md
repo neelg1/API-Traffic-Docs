@@ -12,7 +12,7 @@ pnpm eval:fastapi down   # stop and delete the database, so the next `up` starts
 pnpm eval:fastapi spec   # save the running app's spec to eval/ground-truth/
 ```
 
-Then open <http://localhost:8000> and log in with `FIRST_SUPERUSER` / `FIRST_SUPERUSER_PASSWORD` from [`eval.env`](eval.env).
+Then open <http://localhost:8000> and log in with `FIRST_SUPERUSER` / `FIRST_SUPERUSER_PASSWORD` from [`eval.env`](eval.env). Emails the app sends (password recovery, test email) appear in Mailcatcher at <http://localhost:1080>.
 
 The first `up` downloads the template and builds its images (roughly 1 GB of downloads, several minutes). Later runs reuse the cache.
 
@@ -21,10 +21,12 @@ The first `up` downloads the template and builds its images (roughly 1 GB of dow
 | File | Purpose |
 | --- | --- |
 | `run.sh` | Clones the template at the pinned commit into `src/` (gitignored) and runs it with Docker Compose |
-| `compose.eval.yml` | Overrides on top of the template's `compose.yml`: publish only the backend on port 8000, run migrations and create the superuser on start, one worker |
+| `compose.eval.yml` | Overrides on top of the template's `compose.yml`: publish the backend on port 8000, run migrations and create the superuser on start, one worker, and send email to a Mailcatcher service (web UI on port 1080) |
 | `eval.env` | Synthetic settings (not secrets) that replace the template's `changethis` defaults |
 
-Only `db` and `backend` are started. The template's `compose.override.yml` (dev-only services such as mailcatcher and a Playwright image) is not used.
+Only `db`, `backend`, and `mailcatcher` are started. The template's `compose.override.yml` (dev-only services and a large Playwright image) is not used.
+
+**Known app bug:** `POST /api/v1/password-recovery-html-content/{email}` crashes the server after responding (an invalid `subject:` header name), so recordings skip it. See [`../../known-spec-issues.md`](../../known-spec-issues.md).
 
 ## Updating the version
 

@@ -41,8 +41,9 @@ fetch_source() {
 case "${1:-}" in
   up)
     fetch_source
-    # Only db and backend: the backend serves the frontend too, and the
-    # proxy and adminer aren't needed. --wait blocks until both are healthy.
+    # Only db and backend (plus mailcatcher, which backend depends on): the
+    # backend serves the frontend too, and the proxy and adminer aren't
+    # needed. --wait blocks until they are running and healthy.
     compose up --detach --build --wait db backend
     echo "Running at $BASE_URL (log in with FIRST_SUPERUSER from eval.env)"
     ;;

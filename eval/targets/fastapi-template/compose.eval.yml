@@ -11,3 +11,17 @@ services:
       - bash
       - -c
       - bash scripts/prestart.sh && exec fastapi run --workers 1
+    # Send email to Mailcatcher (SMTP_HOST is in eval.env). The template's
+    # compose.yml doesn't pass the port or TLS setting, so set them here.
+    environment:
+      SMTP_PORT: "1025"
+      SMTP_TLS: "false"
+    depends_on:
+      - mailcatcher
+
+  # Catches outgoing email so the recording script can follow reset links.
+  # Only its web UI/API is published; SMTP stays inside the Compose network.
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080"

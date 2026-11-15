@@ -1,0 +1,16 @@
+{
+  "name": "eval",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Evaluation harness: eval-app recordings, ground-truth specs, and scoring",
+  "type": "module",
+  "scripts": {
+    "record:fastapi": "node scripts/record-fastapi.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "playwright": "1.65.0",
+    "typescript": "7.0.2"
+  }
+}
