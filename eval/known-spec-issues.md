@@ -13,4 +13,9 @@ One entry per issue:
 - **Found:** YYYY-MM-DD, task or PR
 ```
 
-No issues recorded yet. The first comparison happens in task 1.12.
+## fastapi-template: POST /api/v1/password-recovery-html-content/{email}, server crashes after responding
+
+- **Spec says:** `200` with a `text/html` body (a preview of the password-recovery email; superuser only).
+- **Traffic shows:** the server logs `200 OK`, then fails with `RuntimeError: Invalid HTTP header name.` and drops the connection, so the client only sees a network error. The endpoint sets a response header named `subject:`, and header names can't contain a colon (`backend/app/api/routes/login.py`, template 0.12.0; still present on upstream `master` as of 2026-11-13). The recording script doesn't call it.
+- **Scoring:** excluded. It can never be exercised successfully, so count it neither against recall nor in coverage.
+- **Found:** 2026-11-13, task 1.8.

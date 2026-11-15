@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    // Scripts run directly with Node 26 (type stripping), so imports keep their
+    // .ts extensions and only erasable TypeScript syntax is allowed. DOM types
+    // are for code Playwright runs inside the page; eval isn't the pure engine.
+    "lib": ["ES2024", "DOM"],
+    "types": ["node"],
+    "target": "ES2024",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true
+  },
+  "include": ["scripts"]
+}
