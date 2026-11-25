@@ -10,7 +10,8 @@ export function mediaType(contentType: string | undefined): string | undefined {
   return type ? type : undefined;
 }
 
-function isJsonType(type: string | undefined): boolean {
+/** `application/json`, `text/json`, and `+json` types such as `application/problem+json`. */
+export function isJsonType(type: string | undefined): boolean {
   return type !== undefined && (type.endsWith('/json') || type.endsWith('+json'));
 }
 

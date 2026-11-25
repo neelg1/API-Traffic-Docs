@@ -2,6 +2,14 @@
 
 One entry per real choice: what was decided, why, and what was rejected. Newest first.
 
+## 2026-11-24: Filter noise with ordered rules that report a reason
+
+**Decision:** `filterExchanges` keeps API calls and records, for every other exchange, its index and the first rule that dropped it: `no-response` (status `null`), `preflight` (`OPTIONS`), `analytics-host` (a built-in domain denylist, matching subdomains), `not-api-resource` (a known non-API Chrome resource type such as `document`, `script`, `image`, `ping`), then `not-json`. Error statuses (4xx, 5xx) are kept. Unknown or missing resource types, including `other`, fall through to the JSON check. A response counts as JSON when its body parsed as JSON (sniffed included), is empty (e.g. 204), or wasn't captured but is typed as JSON.
+
+**Why:** Error responses are part of an API's contract, and the ground-truth specs document 400, 401, 404, and 422. Dropping only known non-API resource types, rather than keeping only `fetch` and `xhr`, avoids losing API calls Chrome tags as `other`, and HARs without resource types are still filtered by the JSON check. Keeping empty and uncaptured JSON-typed responses keeps DELETEs that return 204 and calls whose body Chrome couldn't return after a reload. Reasons make each rule testable alone and let the panel explain why a request is missing, without copying captured data. On the eval recording, the 58 answered API calls are kept; 221 assets and page loads and 3 aborted calls are dropped.
+
+**Rejected:** Keeping only `fetch` and `xhr`. Dropping all 4xx and 5xx. A list of file extensions for assets, which the JSON check already covers. A user-editable denylist, which belongs with the extension's settings (Phase 3).
+
 ## 2026-11-22: Parse HAR leniently into typed exchanges with tagged bodies
 
 **Decision:** `parseHar` (whole log) and `parseHarEntry` (one entry, as Chrome's `onRequestFinished` gives it) take `unknown` and never throw. An entry missing what every later stage needs (method, absolute URL, numeric status, header lists) becomes a `ParseError` with a fixed reason that names the field, never its value; the rest still parse. Bodies are a tagged union: `json` (with `sniffed` when the type didn't say JSON), `form`, `text`, `binary`, `none` (no body), and `omitted` (a body existed but wasn't captured). A malformed body never fails its entry. Content type comes from the `Content-Type` header, then the HAR's `mimeType`. Status 0 or -1 becomes `null`. Header names are lower-cased; paths stay percent-encoded. `src/platform.d.ts` declares the four standard APIs the parser uses (`URL`, `URLSearchParams`, `atob`, `TextDecoder`) instead of adding the DOM lib. Engine tests, and only tests, get `@types/node` to read the recording from disk.

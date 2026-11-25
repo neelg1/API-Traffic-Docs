@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { parseHar } from '../../src/index';
+import { filterExchanges, parseHar } from '../../src/index';
 
 // Eval app 1's recorded walkthrough (see eval/recordings/README.md).
 // Assertions cover counts, kinds, and field names only, never values (rule 5).
@@ -57,5 +57,21 @@ describe('parseHar on the fastapi-template recording', () => {
     const assets = exchanges.filter((e) => ['script', 'stylesheet', 'image'].includes(e.resourceType ?? ''));
     expect(assets.length).toBeGreaterThan(0);
     expect(assets.every((e) => e.responseBody.kind === 'omitted')).toBe(true);
+  });
+});
+
+describe('filterExchanges on the fastapi-template recording', () => {
+  const { kept, dropped } = filterExchanges(exchanges);
+  const reasons = (reason: string) => dropped.filter((d) => d.reason === reason).length;
+
+  it('keeps exactly the answered API calls', () => {
+    expect(kept.map((e) => e.index)).toEqual(api.filter((e) => e.status !== null).map((e) => e.index));
+    expect(kept).toHaveLength(58);
+  });
+
+  it('drops assets and page loads as non-API resources, and aborted calls as no-response', () => {
+    expect(reasons('not-api-resource')).toBe(221);
+    expect(reasons('no-response')).toBe(3);
+    expect(kept.length + dropped.length).toBe(exchanges.length);
   });
 });
